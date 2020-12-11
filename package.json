@@ -1,0 +1,29 @@
+{
+  "name": "graphql-prisma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js --ext js,graphql --exec babel-node",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "get-schema": "get-graphql-schema http://localhost:4466 > src/generated/prisma.graphql"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.19.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "get-graphql-schema": "^2.1.2",
+    "graphql": "^14.7.0",
+    "graphql-cli": "^2.16.4",
+    "graphql-import": "^1.0.2",
+    "graphql-tools": "^7.0.2",
+    "prisma-binding": "^2.3.16",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

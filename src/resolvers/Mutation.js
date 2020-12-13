@@ -1,5 +1,7 @@
 // creates random ID for ID schema
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
+
+import bcrypt from 'bcryptjs'
 
 const Mutation = {
     async createUser(parent, args, {db, prisma}, info){
@@ -12,8 +14,17 @@ const Mutation = {
         //     throw new Error('Email Taken!');
         // }
 
+        if(args.data.password.length < 8){
+            throw new Error('Password must be 8 characters or longer.');
+        }
+
+        const password = await bcrypt.hash(args.data.password, 10)
+
         const user = await prisma.mutation.createUser({
-            data: args.data
+            data: {
+                ...args.data,
+                password
+            }
         }, info)
 
         return user

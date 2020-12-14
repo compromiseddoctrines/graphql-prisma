@@ -24,7 +24,6 @@ const schemaWithResolvers = makeExecutableSchema({ typeDefs, resolvers })
 const server = new ApolloServer({
   schema: schemaWithResolvers,
   context: async ({ req, connection }) => {
-    console.log(connection)
     return {
       db: db,
       pubsub,

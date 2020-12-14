@@ -1,3 +1,5 @@
+import getUserId from '../utils/getUserId'
+
 const Query = {
     users(parent, args, {db, prisma}, info){
 
@@ -26,17 +28,64 @@ const Query = {
         // })
 
     },
-    me() {
-       return{
-           id: '5345fsdf43dff',
-           name: 'Bon',
-           email: 'compromiseddoctrines@gmail.com',
-           age: 28
-       }
+    async post(parent, args, { prisma, req}, info){
+        const userId = getUserId(req, false)
+
+        const posts = await prisma.query.posts({
+            where: {
+                id: args.id,
+                OR: [{
+                    published: true
+                },{
+                    author: {
+                        id: userId
+                    }
+                }]
+            }
+        }, info)
+
+        if(posts.length === 0){
+            throw new Error("Post not found!")
+        }
+
+        return posts[0]
+    },
+    me(parent, args, {prisma, req}, info) {
+        const userId = getUserId(req)
+
+        return prisma.query.user({
+           where: {
+               id: userId
+           }
+        })
+   },
+   myPosts(parent, args, {prisma, req}, info){
+        const userId = getUserId(req);
+        const opArgs = {
+            where: {
+                author: {
+                    id: userId
+                }
+            }
+        }
+
+        if(args.query){
+            opArgs.where.OR =[{
+                title_contains: args.query
+            },{
+                body_contains: args.query
+            }]
+        }
+
+        return prisma.query.posts(opArgs, info)
    },
    posts(parent, args, {db, prisma}, info) {
 
-        const opArgs ={}
+        const opArgs = {
+            where: {
+                published: true
+            }
+        }
 
         if(args.query){
             opArgs.where={

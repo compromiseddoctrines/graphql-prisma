@@ -1,3 +1,5 @@
+import getUserId from '../utils/getUserId'
+
 const Subscription = {
     comment: {
         subscribe(parent, {postId} , {db, pubsub, prisma} ,info){
@@ -36,6 +38,11 @@ const Subscription = {
            //return pubsub.asyncIterator(`post`) 
         }
     }
+    // myPost: {
+    //     subscribe(parent, args, { prisma }, info){
+    //         const userId = getUserId(req)
+    //     }
+    // }
 }
 
 export { Subscription as default }

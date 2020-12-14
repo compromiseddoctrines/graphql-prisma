@@ -21,6 +21,7 @@
     "graphql-cli": "^2.16.4",
     "graphql-import": "^1.0.2",
     "graphql-tools": "^7.0.2",
+    "jsonwebtoken": "^8.5.1",
     "prisma-binding": "^2.3.16",
     "uuid": "^8.3.2"
   },

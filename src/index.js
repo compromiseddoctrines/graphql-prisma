@@ -8,27 +8,14 @@ import { makeExecutableSchema } from 'graphql-tools';
 const typeDefs = importSchema('./src/schema.graphql');
 
 import db from './db';
-import Query from './resolvers/Query';
-import Mutation from './resolvers/Mutation';
-import Subscription from './resolvers/Subscription';
-import User from './resolvers/User';
-import Post from './resolvers/Post';
-import Comment from './resolvers/Comment';
-
+import { resolvers, fragmentReplacements } from './resolvers/index'
 // import prisma js
 import prisma from './prisma'
 
 const pubsub = new PubSub();
 
 //resolvers
-const resolvers = {
-    Query,
-    Mutation,
-    Subscription,
-    User,
-    Post,
-    Comment
-};
+
 
 // sync schema and resolvers to be executable using graphql tools
 const schemaWithResolvers = makeExecutableSchema({ typeDefs, resolvers })
@@ -36,11 +23,16 @@ const schemaWithResolvers = makeExecutableSchema({ typeDefs, resolvers })
 // apollo server with schema and resolvers
 const server = new ApolloServer({
   schema: schemaWithResolvers,
-  context: {
-    db: db,
-    pubsub,
-    prisma
-  }
+  context: async ({ req, connection }) => {
+    console.log(connection)
+    return {
+      db: db,
+      pubsub,
+      prisma,
+      req
+    };
+  },
+  fragmentReplacements
 });
 
 server.listen().then(({ url }) => {
